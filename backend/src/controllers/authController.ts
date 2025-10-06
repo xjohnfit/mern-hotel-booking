@@ -34,7 +34,7 @@ export const authController = async (req: Request, res: Response) => {
 
         res.cookie("authToken", token, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "strict", maxAge: 24 * 60 * 60 * 1000 });
 
-        return res.status(200).json({ userId: user._id, message: "Login successful" });
+        return res.status(200).json({ userId: user._id, message: "Login Successful" });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Internal Server Error" });

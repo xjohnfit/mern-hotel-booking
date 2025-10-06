@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ToastContainer, toast } from 'react-toastify';
+import { useAppContext } from "../context/AppContext";
+import { useNavigate } from "react-router-dom"; 
 
 interface RegisterFormData {
   firstName: string;
@@ -9,6 +10,9 @@ interface RegisterFormData {
 }
 
 const Register = () => {
+
+    const { showToast } = useAppContext();
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState<RegisterFormData>({
         firstName: "",
@@ -22,18 +26,19 @@ const Register = () => {
         event.preventDefault();
 
         if(!formData.firstName) {
-            return toast('First name is required', { type: 'error' });
+            return showToast({ message: 'First name is required', type: 'error' });
         } else if(!formData.lastName) {
-            return toast('Last name is required', { type: 'error' });
+            return showToast({ message: 'Last name is required', type: 'error' });
         } else if(!formData.email) {
-            return toast('Email is required', { type: 'error' });
+            return showToast({ message: 'Email is required', type: 'error' });
         } else if(!formData.password) {
-            return toast('Password is required', { type: 'error' });
+            return showToast({ message: 'Password is required', type: 'error' });
         }
 
         try {
             const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/register`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -46,15 +51,16 @@ const Register = () => {
                 throw new Error(data.message || 'Registration failed');
             }
             
-            toast('Registration successful!', { type: 'success' });
+            showToast({ message: 'Registration successful!', type: 'success' });
+            setFormData({ firstName: "", lastName: "", email: "", password: "" });
+            navigate('/');
         } catch (error: any) {
-            toast(error.message, { type: 'error' });
+            showToast({ message: error.message, type: 'error' });
         }
     }
 
     return (
         <div className='flex justify-center items-center p-4'>
-            <ToastContainer theme="dark" position="bottom-right" />
             <div className='glass-form max-w-md w-full mx-4'>
                 <h2 className='text-2xl font-bold text-center mb-8 text-gray-100'>
                     Create Account

@@ -1,8 +1,11 @@
 import express from 'express';
 import { authController } from '../controllers/authController';
+import verifyToken from '../middlewares/verifyToken';
+import { validateTokenController } from '../controllers/validateTokenController';
 
 const router = express.Router();
 
 router.post('/login', authController);
+router.get('/validate-token', verifyToken, validateTokenController);
 
 export default router;

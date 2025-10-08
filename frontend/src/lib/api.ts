@@ -14,3 +14,20 @@ export const verifyToken = async (): Promise<boolean> => {
         return false;
     }
 };
+
+export const logout = async (): Promise<void> => {
+    try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/logout`, {
+            method: 'POST',
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            throw new Error("Logout failed");
+        }
+
+        return response.json();
+    } catch (error) {
+        console.log('Error logging out:', error);
+    }
+}

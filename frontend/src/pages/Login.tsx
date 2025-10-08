@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 
@@ -8,7 +8,13 @@ interface LoginFormData {
 }
 
 const Login = () => {
-    const { showToast } = useAppContext();
+
+    const { verifyToken, showToast, setIsLoggedIn } = useAppContext();
+
+    useEffect(() => {
+        verifyToken().then(isLoggedIn => setIsLoggedIn(isLoggedIn));
+    }, [verifyToken]);
+        
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState<LoginFormData>({ email: '', password: '' });
@@ -38,11 +44,14 @@ const Login = () => {
             if (!response.ok) {
                 throw new Error(data.message || 'Login failed');
             }
+
             showToast({ message: data.message, type: 'success' });
+            setIsLoggedIn(true);
             setFormData({ email: "", password: "" });
             navigate('/');
         } catch (error) {
             showToast({ message: 'Login failed', type: 'error' });
+            setIsLoggedIn(false);
             setFormData({ email: "", password: "" });
         }
 

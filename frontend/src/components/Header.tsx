@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const Header = () => {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const { verifyToken } = useAppContext();
+    const { verifyToken, logout, showToast, isLoggedIn, setIsLoggedIn } = useAppContext();
 
     useEffect(() => {
         verifyToken().then(isLoggedIn => setIsLoggedIn(isLoggedIn));
@@ -34,11 +33,15 @@ const Header = () => {
                                 className='flex items-center text-slate-800 px-4 py-2 font-semibold bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-100 hover:to-gray-200 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'>
                                 My Hotels
                             </Link>
-                            <Link
-                                to='/logout'
+                            <button
+                                onClick={async () => {
+                                    await logout();
+                                    setIsLoggedIn(false);
+                                    showToast({ message: 'Logged out successfully', type: 'success' });
+                                }}
                                 className='flex items-center text-slate-800 px-4 py-2 font-semibold bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-100 hover:to-gray-200 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'>
                                 Log-Out
-                            </Link>
+                            </button>
                         </>
                     ) : (
                         <>

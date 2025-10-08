@@ -1,6 +1,6 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
-import { verifyToken } from '../lib/api';
+import { verifyToken, logout } from '../lib/api';
 
 type toastMessage = {
     message: string;
@@ -10,6 +10,9 @@ type toastMessage = {
 type AppContextType = {
     showToast: (toastMessage: toastMessage) => void;
     verifyToken: () => Promise<boolean>;
+    logout: () => Promise<void>;
+    isLoggedIn: boolean;
+    setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -19,13 +22,16 @@ export const AppContextProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     return (
         <AppContext.Provider
             value={{
                 showToast: (toastMessage) =>
                     toast(toastMessage.message, { type: toastMessage.type }),
-                verifyToken
+                verifyToken,
+                logout,
+                isLoggedIn,
+                setIsLoggedIn,
             }}>
             {children}
         </AppContext.Provider>

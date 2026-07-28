@@ -10,10 +10,11 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "moduleResolution": "node",
+        "ignoreDeprecations": "5.0",
         "allowSyntheticDefaultImports": true,
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true
     },
-    "include": ["src/**/*", "../frontend/src/pages"],
+    "include": ["src/**/*"],
     "exclude": ["node_modules", "dist"]
 }
